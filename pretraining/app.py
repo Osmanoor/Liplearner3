@@ -1,7 +1,6 @@
 import streamlit as st
 import tempfile
-import pipeline
-from preprocess import save2vid, preprocess_video
+from pipeline import *
 import time
 import cv2
 import numpy as np
@@ -14,6 +13,7 @@ import uuid
 from pathlib import Path
 from aiortc.contrib.media import MediaRecorder
 import ffmpeg
+from crop import *
 
 
 # account_sid = ''
@@ -221,13 +221,13 @@ if uploaded_file is not None or in_file.exists():
         progress_bar.empty()
         
         # Show the processed video
-        dst_filename = preprocess_video(src_filename=video_file, dst_filename="roi.mp4")
+        dst_filename = crop_mouth_with_talking_detection(src_filename=video_file, dst_filename="roi.mp4")
         st.video("roi.mp4")
 
         # Show a spinner while processing
         with st.spinner('جارٍ تشغيل التعرف على الكلام...'):
-            pipeline = pipeline.build_pipeline()
-            result = pipeline("roi.mp4", 3)
+            #pipeline = pipeline.build_pipeline()
+            result = predict("roi.mp4", 3)
 
         # Show the result
         st.success("اكتملت المعالجة!")
