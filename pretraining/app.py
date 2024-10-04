@@ -5,8 +5,11 @@ import time
 import cv2
 import numpy as np
 import os
+# from twilio.rest import Client
+import uuid
 import ffmpeg
 from crop import *
+
 
 # Set the page config to use the full width of the screen
 st.set_page_config(layout="wide")
@@ -79,7 +82,7 @@ st.markdown('<div class="header">قم بتحميل ملف الفيديو الخ�
 # Create a file uploader
 uploaded_file = st.file_uploader("", type=["mp4"])
 
-if uploaded_file is not None or in_file.exists():
+if uploaded_file is not None:
     col1, col2 = st.columns(2)
 
     with col1:
@@ -110,15 +113,15 @@ if uploaded_file is not None or in_file.exists():
         # Clear the progress message and bar
         progress_message.empty()
         progress_bar.empty()
-        
+        output_path = os.path.join(os.path.curdir,'roi.mp4')
         # Show the processed video
-        dst_filename = crop_mouth_with_talking_detection(src_filename=video_file, dst_filename="roi.mp4")
-        st.video("roi.mp4")
+        crop_mouth_with_talking_detection(video_path=video_file, output_path=output_path, openness_threshold=12)
+        st.video(output_path)
 
         # Show a spinner while processing
         with st.spinner('جارٍ تشغيل التعرف على الكلام...'):
             #pipeline = pipeline.build_pipeline()
-            result = predict("roi.mp4", 3)
+            result = predict("roi.mp4")
 
         # Show the result
         st.success("اكتملت المعالجة!")
