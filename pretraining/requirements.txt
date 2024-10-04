@@ -6,6 +6,4 @@ scipy==1.9.3
 mediapipe
 streamlit
 ffmpeg-python
-sentencepiece
-av
-six
+joblib
