@@ -57,9 +57,9 @@ def crop_mouth_with_talking_detection(video_path, output_path, openness_threshol
 
                     # Add padding and ensure coordinates are within bounds
                     x_min = max(0, x_min - padding)
-                    y_min = max(0, y_min - padding)
+                    y_min = max(0, y_min - padding + 10)
                     x_max = min(frame.shape[1], x_max + padding)
-                    y_max = min(frame.shape[0], y_max + padding)
+                    y_max = min(frame.shape[0], y_max + padding + 20)
 
                     # Store the bounding box (x_min, y_min, x_max, y_max) for future frames
                     fixed_bbox = (x_min, y_min, x_max, y_max)
