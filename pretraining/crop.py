@@ -10,7 +10,7 @@ def calculate_mouth_openness(landmarks, upper_lip_indices, lower_lip_indices):
     lower_lip = np.mean([landmarks[i][1] for i in lower_lip_indices])
     return abs(lower_lip - upper_lip)
 
-def crop_mouth_with_talking_detection(video_path, output_path, openness_threshold=2, frame_check_count=5, padding=60):
+def crop_mouth_with_talking_detection(video_path, output_path, openness_threshold=12, frame_check_count=5, padding=60):
     cap = cv2.VideoCapture(video_path)
     frame_rate = cap.get(cv2.CAP_PROP_FPS)
     frame_width = 88  # Desired width of the cropped mouth region
@@ -87,15 +87,15 @@ def crop_mouth_with_talking_detection(video_path, output_path, openness_threshol
                     if np.mean(mouth_openness_list[-frame_check_count:]) > openness_threshold:
                         # Person is talking, so mark these frames as talking
                         if not current_talking:
-                            # Add the previous three frames (if available)
-                            start_idx = max(0, frame_idx - 3)
+                            # Add the previous six frames (if available)
+                            start_idx = max(0, frame_idx - 6)
                             talking_frames.extend(range(start_idx, frame_idx + 1))
                         current_talking = True
                         talking_frames.append(frame_idx)
                     else:
                         if current_talking:
-                            # Add the current and next three frames
-                            talking_frames.extend(range(frame_idx, frame_idx + 4))
+                            # Add the current and next six frames
+                            talking_frames.extend(range(frame_idx, frame_idx + 1 + 6))
                         current_talking = False
 
                 # Remove old entries to maintain the sliding window for checking mouth openness
