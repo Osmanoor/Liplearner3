@@ -80,7 +80,7 @@ with st.sidebar:
 st.markdown('<div class="header">قم بتحميل ملف الفيديو الخاص بك</div>', unsafe_allow_html=True)
 
 # Create a file uploader
-uploaded_file = st.file_uploader("", type=["mp4"])
+uploaded_file = st.file_uploader("", type=["mp4", "mov"])
 
 if uploaded_file is not None:
     col1, col2 = st.columns(2)
@@ -88,11 +88,23 @@ if uploaded_file is not None:
     with col1:
         # Display the uploaded video
         st.markdown('<div class="subheader">ملف الفيديو المحمل</div>', unsafe_allow_html=True)
-        video_file = 'output.mp4'
-        if uploaded_file is not None:
-            with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-                temp_file.write(uploaded_file.read())
-                video_file = temp_file.name
+
+        # Save the uploaded video to a temporary file
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temp_file:
+            temp_file.write(uploaded_file.read())
+            video_path = temp_file.name
+
+        # Check if the file is in MOV format and convert to MP4
+        if uploaded_file.type == 'video/quicktime':  # iPhone .mov files are usually of this type
+            st.info("Converting .mov to .mp4...")
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temp_output:
+                video = VideoFileClip(video_path)
+                video.write_videofile(temp_output.name, codec="libx264")
+                video_file = temp_output.name
+        else:
+            video_file = video_path
+
+        # Display the video (converted or original)
         st.video(video_file)
 
     with col2:
