@@ -103,7 +103,7 @@ def crop_mouth_with_talking_detection(video_path, output_path, openness_threshol
                     mouth_openness_list.pop(0)
 
                 # Save only the talking frames (by frame index)
-                if frame_idx in talking_frames:
+                if True:#frame_idx in talking_frames:
                     out.write(resized_mouth)
 
         frame_idx += 1
