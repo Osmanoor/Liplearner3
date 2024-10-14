@@ -127,7 +127,7 @@ if uploaded_file is not None:
         progress_bar.empty()
         output_path = os.path.join(os.path.curdir,'roi.mp4')
         # Show the processed video
-        crop_mouth_with_talking_detection(video_path=video_file, output_path=output_path, openness_threshold=12)
+        crop_mouth_fixed(video_path=video_file, output_path=output_path)
         st.video(output_path)
 
         # Show a spinner while processing
