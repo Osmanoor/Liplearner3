@@ -41,7 +41,7 @@ args = argparse.Namespace(
     temperture=0.07,
     save_prefix='checkpoints/',
     dataset='',
-    weights='best.pt'
+    weights='liplearner_model_best.pt'
 )
 def load_missing(model, pretrained_dict):
     model_dict = model.state_dict()
@@ -121,7 +121,7 @@ def embaddings(input):
     return embedding.detach().cpu().numpy()
 
 def predict(video_path):
-  clf_loaded = joblib.load('random_forest_classifier.pkl')
+  clf_loaded = joblib.load('Logistic_Regression_classifier.pkl')
   new_embedding = embaddings(load_video(video_path))
   predicted_folder = clf_loaded.predict([np.asarray(new_embedding).flatten()])
   return predicted_folder[0]
