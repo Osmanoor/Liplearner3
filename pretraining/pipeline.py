@@ -41,7 +41,7 @@ args = argparse.Namespace(
     temperture=0.07,
     save_prefix='checkpoints/',
     dataset='',
-    weights='liplearner_model_best.pt'
+    weights='best.pt'
 )
 def load_missing(model, pretrained_dict):
     model_dict = model.state_dict()
